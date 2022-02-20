@@ -23,4 +23,17 @@ export abstract class CommandFlag {
   public get valueShort (): string {
     return this._nameShort
   }
+
+  public subFlagsArrs (): string[] {
+    if (!this.subFlags) return []
+
+    const values: string[] = []
+
+    for (let i = 0; i < this.subFlags.length; i += 1) {
+      values.push(this.subFlags[i].full)
+      values.push(this.subFlags[i].short)
+    }
+
+    return values
+  }
 }
