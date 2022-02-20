@@ -1,11 +1,11 @@
 /**
  * The CommandFlag class is used to represent a command line flag.
  **/
-export class CommandFlag {
+export abstract class CommandFlag {
   private _name: string
   private _nameShort: string
 
-  constructor (fullname: string, abbv: string) {
+  constructor (fullname: string, abbv: string, public subFlags?: CommandFlag[]) {
     this._name = fullname
     this._nameShort = abbv
   }
