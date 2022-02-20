@@ -21,6 +21,7 @@ export class InputValidator {
     if (inputArgs.length < 3) return false
     // Check if user input project name is valid
     if (!this.isUrlSafe(inputArgs[2])) return false
+    // Check if project type flag is valid
     if (!this.hasValidFlagFormat(inputArgs[3])) return false
     if (this.projectFlagsArray.includes(inputArgs[3])) return false
     // TODO: if there are more userInputs, check to see if they are valid tags.
