@@ -25,9 +25,9 @@ export class InputValidator {
     const projectInput = inputArgs[3]
     if (!this.hasValidFlagFormat(projectInput)) return false
     if (this.projectFlagsArray.includes(projectInput)) return false
-    // TODO: if there are more userInputs, check to see if they are valid tags.
     const projectFlag = this._flags.filter((f: CommandFlag) => f.short === projectInput || f.full === projectInput)[0]
     if (!projectFlag.subFlags && inputArgs[4]) return false
+    // TODO: loop through rest of arguments and check if they are valid subflags.
 
     return true
   }
