@@ -22,9 +22,13 @@ export class InputValidator {
     // Check if user input project name is valid
     if (!this.isUrlSafe(inputArgs[2])) return false
     // Check if project type flag is valid
-    if (!this.hasValidFlagFormat(inputArgs[3])) return false
-    if (this.projectFlagsArray.includes(inputArgs[3])) return false
+    const projectInput = inputArgs[3]
+    if (!this.hasValidFlagFormat(projectInput)) return false
+    if (this.projectFlagsArray.includes(projectInput)) return false
     // TODO: if there are more userInputs, check to see if they are valid tags.
+    const projectFlag = this._flags.filter((f: CommandFlag) => f.short === projectInput || f.full === projectInput)[0]
+    if (!projectFlag.subFlags && inputArgs[4]) return false
+
     return true
   }
 
