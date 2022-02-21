@@ -8,6 +8,9 @@ export enum INVALID_REASON {
   FLAG_NO_EXISTS = 'Invalid input. Flag not found'
 }
 
+/**
+ * Represents a CLI input validator.
+ */
 export class InputValidator {
   private _flags: CommandFlag[]
   constructor (projectFlags: CommandFlag[]) {
@@ -54,10 +57,20 @@ export class InputValidator {
     return true
   }
 
+  /**
+   * Checks if a string is URL safe.
+   * @param {string} value - The string to check.
+   * @returns {boolean} - String is url safe.
+   */
   private isUrlSafe = (value: string): boolean => {
     return /^([a-z]|-|_|\d)+$/.test(value)
   }
 
+  /**
+   * Checks if a string has a valid flag format.
+   * @param {string} value - The string to check.
+   * @returns {boolean} - String has valid flag format.
+   */
   private hasValidFlagFormat = (value: string): boolean => {
     return /^(--\w+)|(-\w{1,2})$/.test(value)
   }
