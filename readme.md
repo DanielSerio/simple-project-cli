@@ -19,8 +19,8 @@ project-cli [project name] ([--template-flag] --specific-flag)
     - `--basic`
     - `-b`
   - Canvas
-    - `--basic`
-    - `-b`
+    - `--canvas`
+    - `-c`
   - React
     - `--react`
     - `-r`
@@ -33,3 +33,29 @@ project-cli [project name] ([--template-flag] --specific-flag)
   - React Hook Forms
     - `--forms`
     - `-rf`
+
+Examples:
+
+```bash
+  project-cli project-name    # creates a basic project
+```
+
+```bash
+  project-cli project-name --canvas   # creates a canvas project
+```
+
+```bash
+  project-cli project-name --react   # creates a react project
+```
+
+```bash
+  project-cli project-name -r --forms   # creates a react project with hook forms
+```
+
+```bash
+  project-cli project-name --react --router   # creates a react project with router
+```
+
+```bash
+  project-cli project-name --react --router --forms   # creates a react project with hook-forms & react-router
+```
