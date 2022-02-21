@@ -7,6 +7,8 @@ A simple CLI application for generating frontend typescript project starters on 
   yarn add --global simple-project-cli
   ```
 
+**NOTE** You must add simple-project-cli to your environment PATH
+
 ### Use
 
 ```bash
