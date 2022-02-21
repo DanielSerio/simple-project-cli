@@ -1,0 +1,24 @@
+html,
+body {
+  height: 100vh;
+  width: 100vw;
+}
+
+body,
+.root,
+.app { position: relative; }
+
+body,
+.root { overflow: hidden; }
+
+.root {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.root > .app {
+  height: 100%;
+  width: 100%;
+}

@@ -1,0 +1,14 @@
+$base-hue: 265;
+$background-sat: 8%;
+$background-lght: 92%;
+$dark-background-lght: 18%;
+
+$white: hsl($base-hue, $background-sat, $background-lght);
+$black: hsl($base-hue, $background-sat, $dark-background-lght);
+
+$background-light: $white;
+$color-light: $black;
+$background-dark: $black;
+$color-dark: $white;
+$primary-color-light: hsl($base-hue, 75%, 45%);
+$primary-color-dark: hsl($base-hue, 35%, 75%);

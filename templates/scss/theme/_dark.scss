@@ -1,0 +1,6 @@
+.root > .app[data-darkmode=true] {
+  background-color: $background-dark;
+  color: $color-dark;
+
+  a { color: $primary-color-dark; }
+}

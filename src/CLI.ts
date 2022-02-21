@@ -35,9 +35,8 @@ export class CLI {
       this.initNPM()
       this._scriptsBuilder.add()
       this.installDependancies()
-      // TODO: add eslintrc
-      // TODO: add webpack config
-      // TODO: add apropriate template dir
+      // TODO: copy webpack config
+      // TODO: copy appropriate template dir
     } else {
       const [bool, reason] = isValid as [false, INVALID_REASON]
       console.error({ created: bool, reason })
