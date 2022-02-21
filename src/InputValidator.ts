@@ -1,5 +1,13 @@
 import { CommandFlag } from './CommandFlag'
 
+export enum INVALID_REASON {
+  ARGS_LEN = 'Invalid input. Too few arguments provided. Expected at least 3',
+  URL_SAFE = 'Invalid input. \'project-name\' must be url-safe',
+  FLAG_FORMAT = 'Invalid input. Invalid flag format',
+  FLAG_NO_EXISTS = 'Invalid input. Flag not found',
+  NO_SUBFLAGS = 'Invalid input. Previous flag does not have subflags'
+}
+
 export class InputValidator {
   private _flags: CommandFlag[]
   constructor (projectFlags: CommandFlag[]) {
@@ -17,18 +25,20 @@ export class InputValidator {
     return values
   }
 
-  public isValid = (inputArgs: string[]): boolean => {
-    if (inputArgs.length < 3) return false
+  public isValid = (inputArgs: string[]): true|[false, INVALID_REASON] => {
+    if (inputArgs.length < 3) return [false, INVALID_REASON.ARGS_LEN]
     // Check if user input project name is valid
-    if (!this.isUrlSafe(inputArgs[2])) return false
+    if (!this.isUrlSafe(inputArgs[2])) return [false, INVALID_REASON.URL_SAFE]
     // Check if project type flag is valid
     const projectInput = inputArgs[3]
-    if (!this.hasValidFlagFormat(projectInput)) return false
-    if (this.projectFlagsArray.includes(projectInput)) return false
+    if (!this.hasValidFlagFormat(projectInput)) return [false, INVALID_REASON.FLAG_FORMAT]
+    if (this.projectFlagsArray.includes(projectInput)) return [false, INVALID_REASON.FLAG_NO_EXISTS]
     const projectFlag = this._flags.filter((f: CommandFlag) => f.short === projectInput || f.full === projectInput)[0]
-    if (!projectFlag.subFlags && inputArgs[4]) return false
-    // TODO: loop through rest of arguments and check if they are valid subflags.
-
+    if (!projectFlag.subFlags && inputArgs[4]) return [false, INVALID_REASON.NO_SUBFLAGS]
+    const rest = inputArgs.slice(4)
+    for (let i = 0; i < rest.length; i += 1) {
+      if (!projectFlag.subFlagsArrs.includes(rest[i])) return [false, INVALID_REASON.FLAG_NO_EXISTS]
+    }
     return true
   }
 
