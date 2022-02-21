@@ -1,11 +1,11 @@
+/* eslint-disable no-unused-vars */
 import { CommandFlag } from './CommandFlag'
 
 export enum INVALID_REASON {
   ARGS_LEN = 'Invalid input. Too few arguments provided. Expected at least 3',
   URL_SAFE = 'Invalid input. \'project-name\' must be url-safe',
   FLAG_FORMAT = 'Invalid input. Invalid flag format',
-  FLAG_NO_EXISTS = 'Invalid input. Flag not found',
-  NO_SUBFLAGS = 'Invalid input. Previous flag does not have subflags'
+  FLAG_NO_EXISTS = 'Invalid input. Flag not found'
 }
 
 export class InputValidator {
@@ -25,19 +25,31 @@ export class InputValidator {
     return values
   }
 
+  /**
+   * Check if user input args are valid. Expects nodePath and filepath to be stripped.
+   * @returns {true|[false, INVALID_REASON]} true|[false, INVALID_REASON]
+   * */
   public isValid = (inputArgs: string[]): true|[false, INVALID_REASON] => {
-    if (inputArgs.length < 3) return [false, INVALID_REASON.ARGS_LEN]
+    const len: number = inputArgs.length
+    if (!len) return [false, INVALID_REASON.ARGS_LEN]
     // Check if user input project name is valid
-    if (!this.isUrlSafe(inputArgs[2])) return [false, INVALID_REASON.URL_SAFE]
+    if (!this.isUrlSafe(inputArgs[0])) return [false, INVALID_REASON.URL_SAFE]
     // Check if project type flag is valid
-    const projectInput = inputArgs[3]
-    if (!this.hasValidFlagFormat(projectInput)) return [false, INVALID_REASON.FLAG_FORMAT]
-    if (this.projectFlagsArray.includes(projectInput)) return [false, INVALID_REASON.FLAG_NO_EXISTS]
-    const projectFlag = this._flags.filter((f: CommandFlag) => f.short === projectInput || f.full === projectInput)[0]
-    if (!projectFlag.subFlags && inputArgs[4]) return [false, INVALID_REASON.NO_SUBFLAGS]
-    const rest = inputArgs.slice(4)
-    for (let i = 0; i < rest.length; i += 1) {
-      if (!projectFlag.subFlagsArrs.includes(rest[i])) return [false, INVALID_REASON.FLAG_NO_EXISTS]
+    if (len > 1) {
+      const projectTypeName = inputArgs[1]
+      if (!this.hasValidFlagFormat(projectTypeName)) return [false, INVALID_REASON.FLAG_FORMAT]
+      if (!this.projectFlagsArray.includes(projectTypeName)) return [false, INVALID_REASON.FLAG_NO_EXISTS]
+      const projectFlagIndex: number = this._flags.findIndex((f: CommandFlag) => {
+        const { short, full } = f
+        return [short, full].includes(projectTypeName)
+      })
+      if (projectFlagIndex < 0) return [false, INVALID_REASON.FLAG_NO_EXISTS]
+      const projectFlag = this._flags[projectFlagIndex]
+      if ((!projectFlag || !projectFlag.subFlags) && inputArgs[2]) return [false, INVALID_REASON.FLAG_NO_EXISTS]
+      const rest = inputArgs.slice(2)
+      for (let i = 0; i < rest.length; i += 1) {
+        if (!projectFlag.subFlagsArrs.includes(rest[i])) return [false, INVALID_REASON.FLAG_NO_EXISTS]
+      }
     }
     return true
   }

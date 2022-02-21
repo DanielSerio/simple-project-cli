@@ -9,4 +9,10 @@ export class ReactProjectFlag extends CommandFlag {
       new FormsFlag()
     ])
   }
+
+  public get full (): string { return `--${this._name}` }
+
+  public get short (): string {
+    return `-${this._nameShort}`
+  }
 }

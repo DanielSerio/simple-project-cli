@@ -2,8 +2,8 @@
  * The CommandFlag class is used to represent a command line flag.
  **/
 export abstract class CommandFlag {
-  private _name: string
-  private _nameShort: string
+  protected _name: string
+  protected _nameShort: string
 
   constructor (fullname: string, abbv: string, public subFlags?: CommandFlag[]) {
     this._name = fullname
