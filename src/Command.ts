@@ -20,4 +20,8 @@ export class Command {
   public get name (): string {
     return this._name
   }
+
+  public async run (args: string[]): Promise<void> {
+    // TODO: strip paths from args
+  }
 }
