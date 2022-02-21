@@ -8,7 +8,6 @@ describe('InputValidator', () => {
     new ReactProjectFlag()
   ]
   const validator: InputValidator = new InputValidator(flags)
-  console.log(flags[0].full)
 
   test('should return false if too few arguments', () => {
     const testArgs: string[] = []

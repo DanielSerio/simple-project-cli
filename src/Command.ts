@@ -22,6 +22,6 @@ export class Command {
   }
 
   public async run (args: string[]): Promise<void> {
-    // TODO: strip paths from args
+    console.log(args)
   }
 }
