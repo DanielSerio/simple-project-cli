@@ -34,7 +34,7 @@ export class CLI {
       this.chDir(this.args[0])
       this.initNPM()
       this._scriptsBuilder.add()
-      // TODO: add NPM Deps
+      this.installDependancies()
       // TODO: add eslintrc
       // TODO: add webpack config
       // TODO: add apropriate template dir
@@ -43,6 +43,13 @@ export class CLI {
       console.error({ created: bool, reason })
       process.exit()
     }
+  }
+
+  private async installDependancies (): Promise<void> {
+    const deps = this.dependancies
+    const devDeps = this.devDependancies
+    if (deps) await execSync(`yarn add ${deps.join(' ')}`)
+    await execSync(`yarn add --dev ${devDeps.join(' ')}`)
   }
 
   private get devDependancies (): string[] {
