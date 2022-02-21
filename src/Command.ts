@@ -2,11 +2,10 @@ import { CommandFlag } from './CommandFlag'
 
 /**
  * Represents a cli command.
- * @param
  */
 export class Command {
-  private _name: string
-  private _flags?: CommandFlag[]
+  protected _name: string
+  protected _flags?: CommandFlag[]
 
   constructor (name: string, flags?: CommandFlag[]) {
     this._name = name
@@ -22,6 +21,6 @@ export class Command {
   }
 
   public async run (args: string[]): Promise<void> {
-    console.log(args)
+
   }
 }
