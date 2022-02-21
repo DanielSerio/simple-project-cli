@@ -72,14 +72,31 @@ class CreateCommand extends Command_1.Command {
             yield this.initNPM();
             yield this._scriptsBuilder.add();
             yield this.installDependancies();
+            yield this.createDir('src');
             yield this.copyWebpack(args[1] !== undefined && (args[1] === '-r' || args[1] === '--react'));
-            if (!args[1] || (args[1] === '--basic' || args[1] === '-b')) {
-                yield this.copyDirTo(path_1.resolve(__dirname, '..\\templates\\basic'), `${process.cwd()}\\src`)
-                    .then(copySass);
+            if (args[1] === undefined || (args[1] === '--basic' || args[1] === '-b')) {
+                const filePath = path_1.resolve(`${__dirname}`, '..\\templates\\basic\\basic.ts');
+                const dest = path_1.resolve(`${process.cwd()}\\src\\index.ts`);
+                if (yield fs_1.existsSync(filePath)) {
+                    if (!(yield fs_1.existsSync(dest))) {
+                        const data = yield fs_1.readFileSync(filePath, { encoding: 'ascii' });
+                        yield fs_1.closeSync(fs_1.openSync(dest, 'w'));
+                        yield fs_1.writeFileSync(dest, data);
+                    }
+                }
+                yield copySass();
             }
             if (args[1] === '--canvas' || args[1] === '-c') {
-                yield this.copyDirTo(path_1.resolve(__dirname, '..\\templates\\canvas'), `${process.cwd()}\\src`)
-                    .then(copySass);
+                const filePath = path_1.resolve(`${__dirname}`, '..\\templates\\basic\\canvas.ts');
+                const dest = path_1.resolve(`${process.cwd()}\\src\\index.ts`);
+                if (yield fs_1.existsSync(filePath)) {
+                    if (!(yield fs_1.existsSync(dest))) {
+                        const data = yield fs_1.readFileSync(filePath, { encoding: 'ascii' });
+                        yield fs_1.closeSync(fs_1.openSync(dest, 'w'));
+                        yield fs_1.writeFileSync(dest, data);
+                    }
+                }
+                yield copySass();
             }
             if (args[1] === '--react' || args[1] === '-r') {
                 const rest = args.slice(2);
@@ -115,11 +132,8 @@ class CreateCommand extends Command_1.Command {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 yield child_process_1.execSync(`robocopy ${path} ${dest} /e`);
-                console.log('copied');
             }
             catch (e) {
-                console.error(e.message);
-                console.log(e.status);
                 console.log(e.output.toString());
                 if (e.status !== 1)
                     process.exit();
@@ -130,8 +144,9 @@ class CreateCommand extends Command_1.Command {
         return __awaiter(this, void 0, void 0, function* () {
             const deps = this.dependancies;
             const devDeps = this.devDependancies;
-            if (deps)
+            if (deps && deps.length > 0) {
                 yield child_process_1.execSync(`yarn add ${deps.join(' ')}`);
+            }
             yield child_process_1.execSync(`yarn add --dev ${devDeps.join(' ')}`);
         });
     }

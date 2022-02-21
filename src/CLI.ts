@@ -33,7 +33,7 @@ export class CLI {
   }
 
   public get args (): string[] {
-    return process.argv.slice(2)
+    return process.argv.slice(2).filter((v: string) => v.length)
   }
 
   public print (): void {

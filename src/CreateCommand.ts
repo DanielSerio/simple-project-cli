@@ -1,6 +1,6 @@
 /* eslint-disable node/no-path-concat */
 import { execSync } from 'child_process'
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
+import { closeSync, copyFileSync, existsSync, mkdirSync, openSync, readFileSync, writeFileSync } from 'fs'
 import { chdir } from 'process'
 import { CommandFlag } from './CommandFlag'
 import { ScriptsBuilder } from './ScriptsBuilder'
@@ -49,14 +49,31 @@ export class CreateCommand extends Command {
     await this.initNPM()
     await this._scriptsBuilder.add()
     await this.installDependancies()
+    await this.createDir('src')
     await this.copyWebpack(args[1] !== undefined && (args[1] === '-r' || args[1] === '--react'))
-    if (!args[1] || (args[1] === '--basic' || args[1] === '-b')) {
-      await this.copyDirTo(resolve(__dirname, '..\\templates\\basic'), `${process.cwd()}\\src`)
-        .then(copySass)
+    if (args[1] === undefined || (args[1] === '--basic' || args[1] === '-b')) {
+      const filePath: string = resolve(`${__dirname}`, '..\\templates\\basic\\basic.ts')
+      const dest: string = resolve(`${process.cwd()}\\src\\index.ts`)
+      if (await existsSync(filePath)) {
+        if (!await existsSync(dest)) {
+          const data = await readFileSync(filePath, { encoding: 'ascii' })
+          await closeSync(openSync(dest, 'w'))
+          await writeFileSync(dest, data)
+        }
+      }
+      await copySass()
     }
     if (args[1] === '--canvas' || args[1] === '-c') {
-      await this.copyDirTo(resolve(__dirname, '..\\templates\\canvas'), `${process.cwd()}\\src`)
-      .then(copySass)
+      const filePath: string = resolve(`${__dirname}`, '..\\templates\\basic\\canvas.ts')
+      const dest: string = resolve(`${process.cwd()}\\src\\index.ts`)
+      if (await existsSync(filePath)) {
+        if (!await existsSync(dest)) {
+          const data = await readFileSync(filePath, { encoding: 'ascii' })
+          await closeSync(openSync(dest, 'w'))
+          await writeFileSync(dest, data)
+        }
+      }
+      await copySass()
     }
 
     if (args[1] === '--react' || args[1] === '-r') {
@@ -115,7 +132,9 @@ export class CreateCommand extends Command {
   private async installDependancies (): Promise<void> {
     const deps = this.dependancies
     const devDeps = this.devDependancies
-    if (deps) await execSync(`yarn add ${deps.join(' ')}`)
+    if (deps && deps.length > 0) {
+      await execSync(`yarn add ${deps.join(' ')}`)
+    }
     await execSync(`yarn add --dev ${devDeps.join(' ')}`)
   }
 

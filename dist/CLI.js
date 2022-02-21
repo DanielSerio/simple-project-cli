@@ -28,7 +28,7 @@ class CLI {
         }
     }
     get args() {
-        return process.argv.slice(2);
+        return process.argv.slice(2).filter((v) => v.length);
     }
     print() {
         let projectType = 'basic';
