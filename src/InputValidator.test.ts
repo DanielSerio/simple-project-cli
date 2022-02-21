@@ -67,7 +67,6 @@ describe('InputValidator', () => {
   test('should return true if valid', () => {
     const testArgs: string[] = ['project-name']
     expect(validator.isValid([...testArgs])).toBe(true)
-    console.log([...testArgs, '--basic'])
     expect(validator.isValid([...testArgs, '--basic'])).toBe(true)
     expect(validator.isValid([...testArgs, '-b'])).toBe(true)
     expect(validator.isValid([...testArgs, '--canvas'])).toBe(true)
