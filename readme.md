@@ -10,13 +10,26 @@ A simple CLI application for generating frontend typescript project starters on 
 ### Use
 
 ```bash
-project-cli [project name] (*optional template)
+project-cli [project name] ([--template-flag] --specific-flag) 
 ```
 
-#### Templates:
+#### Templates Flags:
 
   - Basic
+    - `--basic`
+    - `-b`
   - Canvas
+    - `--basic`
+    - `-b`
   - React
+    - `--react`
+    - `-r`
 
-.
+##### Specific Flags:
+
+  - React Router 
+    - `--router`
+    - `-rr`
+  - React Hook Forms
+    - `--forms`
+    - `-rf`

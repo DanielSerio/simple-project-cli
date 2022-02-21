@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Command = void 0;
 /**
  * Represents a cli command.
- * @param
  */
 class Command {
     constructor(name, flags) {
@@ -28,7 +27,6 @@ class Command {
     }
     run(args) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(args);
         });
     }
 }

@@ -1,5 +1,6 @@
+/* eslint-disable node/no-path-concat */
 import { execSync } from 'child_process'
-import { existsSync, mkdirSync, readFileSync } from 'fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
 import { chdir } from 'process'
 import { CommandFlag } from './CommandFlag'
 import { ScriptsBuilder } from './ScriptsBuilder'
@@ -10,7 +11,7 @@ import { Command } from './Command'
  * @param
  */
 export class CreateCommand extends Command {
-  private _scriptsBuilder: ScriptsBuilder = new ScriptsBuilder(process.cwd())
+  private _scriptsBuilder!: ScriptsBuilder
   public dependancies: string[] = []
   public devDependancies: string[] = [
       'typescript',
@@ -38,6 +39,10 @@ export class CreateCommand extends Command {
   }
 
   public async run (args: string[]): Promise<void> {
+    const copySass = async (): Promise<void> => {
+      return await this.copyDirTo(resolve(__dirname, '..\\templates\\scss'), `${process.cwd()}\\src\\scss`)
+    }
+    this._scriptsBuilder = new ScriptsBuilder(`${process.cwd()}\\${args[0]}`)
     this.setDeps(args)
     await this.createDir(args[0])
     await this.chDir(args[0])
@@ -45,44 +50,49 @@ export class CreateCommand extends Command {
     await this._scriptsBuilder.add()
     await this.installDependancies()
     await this.copyWebpack(args[1] !== undefined && (args[1] === '-r' || args[1] === '--react'))
-    await this.copyDirTo(resolve(__dirname, '..\\templates\\scss'), `${process.cwd()}\\scss`)
     if (!args[1] || (args[1] === '--basic' || args[1] === '-b')) {
       await this.copyDirTo(resolve(__dirname, '..\\templates\\basic'), `${process.cwd()}\\src`)
+        .then(copySass)
     }
-    if (!args[1] || (args[1] === '--canvas' || args[1] === '-c')) {
+    if (args[1] === '--canvas' || args[1] === '-c') {
       await this.copyDirTo(resolve(__dirname, '..\\templates\\canvas'), `${process.cwd()}\\src`)
+      .then(copySass)
     }
 
-    if (!args[1] || (args[1] === '--react' || args[1] === '-r')) {
+    if (args[1] === '--react' || args[1] === '-r') {
       const rest = args.slice(2)
       const shortIndex: number = rest.indexOf('-rr')
       const longIndex: number = rest.indexOf('--router')
       if (shortIndex + longIndex === -2) {
         await this.copyDirTo(resolve(__dirname, '..\\templates\\react\\react-basic'), `${process.cwd()}\\src`)
+          .then(copySass)
       } else {
         await this.copyDirTo(resolve(__dirname, '..\\templates\\react\\react-router'), `${process.cwd()}\\src`)
+          .then(copySass)
       }
     }
-
     await this.copyHTML(args[0])
+    await this.copyTSConfig(args[1] === '-r' || args[1] === '--react')
   }
 
   private async copyHTML (title: string): Promise<void> {
-    // eslint-disable-next-line node/no-path-concat
-    const filePath: string = resolve(`${__dirname}\\templates\\template.html`)
+    const filePath: string = resolve(`${__dirname}`, '..\\templates\\template.html')
     const value = await readFileSync(filePath).toString()
-    value.replace('#####', title)
-    await execSync(`copy ${filePath} ${process.cwd()}\\webpack.config.js`)
+    await writeFileSync(`${process.cwd()}\\src\\index.html`, value.replace(/<title>#####<\/title>/gmi, `<title>${title}</title>`))
   }
 
   private async copyWebpack (react?: boolean): Promise<void> {
-    // eslint-disable-next-line node/no-path-concat
-    const filePath: string = resolve(`${__dirname}\\templates\\${react ? 'react' : 'basic'}`, 'webpack.config.js')
-    await execSync(`copy ${filePath} ${process.cwd()}\\webpack.config.js`)
+    const filePath: string = resolve(`${__dirname}`, `..\\templates\\${react ? 'react' : 'basic'}`, 'webpack.config.js')
+    await execSync(`copy "${filePath}" "${process.cwd()}\\webpack.config.js"`)
   }
 
   private async copyDirTo (path: string, dest: string): Promise<void> {
-    await execSync(`xcopy ${path} ${dest} /s /e`)
+    try {
+      await execSync(`robocopy ${path} ${dest} /e`)
+    } catch (e) {
+      console.log((e as any).output.toString())
+      if ((e as any).status !== 1) process.exit()
+    }
   }
 
   private setDeps = (args: string[]): void => {
@@ -120,5 +130,10 @@ export class CreateCommand extends Command {
 
   private async initNPM (): Promise<void> {
     await execSync('yarn init -y')
+  }
+
+  private async copyTSConfig (react?: boolean): Promise<void> {
+    const filePath: string = resolve(`${__dirname}`, `..\\templates\\${react ? 'react' : 'basic'}`, 'tsconfig.json')
+    await execSync(`copy "${filePath}" "${process.cwd()}\\tsconfig.json"`)
   }
 }

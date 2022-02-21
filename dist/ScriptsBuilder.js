@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ScriptsBuilder = void 0;
 const fs_1 = require("fs");
 class ScriptsBuilder {
+    // eslint-disable-next-line no-useless-constructor
     constructor(path) {
         this.path = path;
         this._JSON = {
@@ -23,8 +24,8 @@ class ScriptsBuilder {
     get JSONValue() {
         let value = JSON.stringify(this._JSON);
         value = value.replace(/\{/, '{\n\t');
-        value = value.replace(/,/, ',\n\t');
-        return `${value.replace(/\}/, '\n}')},\n`;
+        value = value.replace(/\,/, ',\n\t');
+        return `${value.replace(/\}/, '\n}')},`;
     }
     add() {
         return __awaiter(this, void 0, void 0, function* () {

@@ -19,8 +19,8 @@ export class ScriptsBuilder {
   public get JSONValue (): string {
     let value: string = JSON.stringify(this._JSON)
     value = value.replace(/\{/, '{\n\t')
-    value = value.replace(/,/, ',\n\t')
-    return `${value.replace(/\}/, '\n}')},\n`
+    value = value.replace(/\,/, ',\n\t')
+    return `${value.replace(/\}/, '\n}')},`
   }
 
   public async add (): Promise<void> {

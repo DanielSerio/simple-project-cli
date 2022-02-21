@@ -1,29 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CLI = void 0;
-const Command_1 = require("./Command");
+const CreateCommand_1 = require("./CreateCommand");
 const project_type_1 = require("./flags/project-type");
 const InputValidator_1 = require("./InputValidator");
-const ScriptsBuilder_1 = require("./ScriptsBuilder");
 /**
  * The CLI class is the main entry point for the program. It creates a Command object and runs it.
  */
 class CLI {
     constructor() {
-        this._scriptsBuilder = new ScriptsBuilder_1.ScriptsBuilder(process.cwd());
         const projectFlags = [
             new project_type_1.BasicProjectFlag(),
             new project_type_1.CanvasProjectFlag(),
             new project_type_1.ReactProjectFlag()
         ];
         this._flags = projectFlags;
-        this.createCommand = new Command_1.Command('CREATE', projectFlags);
+        this.createCommand = new CreateCommand_1.CreateCommand(projectFlags);
         this.inputValidator = new InputValidator_1.InputValidator(projectFlags);
         const isValid = this.inputValidator.isValid(this.args);
         if (isValid === true) {
             this.createCommand.run(this.args);
-            console.log(this._scriptsBuilder.path);
-            this._scriptsBuilder.add();
         }
         else {
             const [bool, reason] = isValid;
