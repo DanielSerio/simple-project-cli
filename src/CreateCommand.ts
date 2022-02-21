@@ -42,8 +42,8 @@ export class CreateCommand extends Command {
     const copySass = async (): Promise<void> => {
       return await this.copyDirTo(resolve(__dirname, '..\\templates\\scss'), `${process.cwd()}\\src\\scss`)
     }
-    this._scriptsBuilder = new ScriptsBuilder(`${process.cwd()}\\${args[0]}`)
     this.setDeps(args)
+    this._scriptsBuilder = new ScriptsBuilder(`${process.cwd()}\\${args[0]}`)
     await this.createDir(args[0])
     await this.chDir(args[0])
     await this.initNPM()
@@ -124,6 +124,7 @@ export class CreateCommand extends Command {
       this.dependancies.push('react-router-dom')
       this.devDependancies.push('@types/react-router-dom')
     }
+
     if (args.includes('-rf') || args.includes('--forms')) {
       this.dependancies.push('react-hook-form')
     }
