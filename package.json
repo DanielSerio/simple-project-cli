@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "readme": "./readme.md",
+  "repository": {
+    "url": "https://github.com/DanielSerio/simple-project-cli"
+  },
   "author": {
     "name": "Dan Serio"
   },
