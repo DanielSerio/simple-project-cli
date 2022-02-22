@@ -1,26 +1,15 @@
 import { readFileSync, writeFileSync } from 'fs'
 
-interface Scripts {
-  start: string
-  test: string
-  build: string
-}
-
 export class ScriptsBuilder {
-  private _JSON: Scripts = {
-    start: 'webpack serve --mode development',
-    test: 'jest',
-    build: 'webpack --mode production'
-  }
-
   // eslint-disable-next-line no-useless-constructor
   constructor (public path: string) {}
 
   public get JSONValue (): string {
-    let value: string = JSON.stringify(this._JSON)
-    value = value.replace(/\{/, '{\n\t')
-    value = value.replace(/\,/, ',\n\t')
-    return `${value.replace(/\}/, '\n}')},`
+    return `{
+      start: 'webpack serve --mode development',
+      test: 'jest',
+      build: 'webpack --mode production'
+    },`
   }
 
   public async add (): Promise<void> {

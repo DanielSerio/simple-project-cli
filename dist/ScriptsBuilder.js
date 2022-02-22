@@ -15,17 +15,13 @@ class ScriptsBuilder {
     // eslint-disable-next-line no-useless-constructor
     constructor(path) {
         this.path = path;
-        this._JSON = {
-            start: 'webpack serve --mode development',
-            test: 'jest',
-            build: 'webpack --mode production'
-        };
     }
     get JSONValue() {
-        let value = JSON.stringify(this._JSON);
-        value = value.replace(/\{/, '{\n\t');
-        value = value.replace(/\,/, ',\n\t');
-        return `${value.replace(/\}/, '\n}')},`;
+        return `{
+      start: 'webpack serve --mode development',
+      test: 'jest',
+      build: 'webpack --mode production'
+    },`;
     }
     add() {
         return __awaiter(this, void 0, void 0, function* () {
