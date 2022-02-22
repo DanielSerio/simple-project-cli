@@ -5,11 +5,11 @@ export class ScriptsBuilder {
   constructor (public path: string) {}
 
   public get JSONValue (): string {
-    return `{
-      start: 'webpack serve --mode development',
-      test: 'jest',
-      build: 'webpack --mode production'
-    },`
+    return `\t"scripts": {
+      "start": "webpack serve --mode development",
+      "test": "jest",
+      "build": "webpack --mode production"
+\t},`
   }
 
   public async add (): Promise<void> {

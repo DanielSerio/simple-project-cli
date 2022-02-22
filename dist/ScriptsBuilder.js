@@ -17,11 +17,11 @@ class ScriptsBuilder {
         this.path = path;
     }
     get JSONValue() {
-        return `{
-      start: 'webpack serve --mode development',
-      test: 'jest',
-      build: 'webpack --mode production'
-    },`;
+        return `\t"scripts": {
+      "start": "webpack serve --mode development",
+      "test": "jest",
+      "build": "webpack --mode production"
+\t},`;
     }
     add() {
         return __awaiter(this, void 0, void 0, function* () {
