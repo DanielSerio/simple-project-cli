@@ -1,7 +1,11 @@
 {
   "name": "simple-project-cli",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "readme": "./readme.md",
+  "author": {
+    "name": "Dan Serio"
+  },
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^27.4.0",
