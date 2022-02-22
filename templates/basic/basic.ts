@@ -1,3 +1,4 @@
+import './scss/style.scss'
 window.addEventListener('load', onLoad)
 
 /**

@@ -65,8 +65,8 @@ class CreateCommand extends Command_1.Command {
             const copySass = () => __awaiter(this, void 0, void 0, function* () {
                 return yield this.copyDirTo(path_1.resolve(__dirname, '..\\templates\\scss'), `${process.cwd()}\\src\\scss`);
             });
-            this._scriptsBuilder = new ScriptsBuilder_1.ScriptsBuilder(`${process.cwd()}\\${args[0]}`);
             this.setDeps(args);
+            this._scriptsBuilder = new ScriptsBuilder_1.ScriptsBuilder(`${process.cwd()}\\${args[0]}`);
             yield this.createDir(args[0]);
             yield this.chDir(args[0]);
             yield this.initNPM();
