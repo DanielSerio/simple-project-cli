@@ -113,6 +113,7 @@ class CreateCommand extends Command_1.Command {
             }
             yield this.copyHTML(args[0]);
             yield this.copyTSConfig(args[1] === '-r' || args[1] === '--react');
+            yield this._scriptsBuilder.add();
         });
     }
     copyHTML(title) {
@@ -131,7 +132,7 @@ class CreateCommand extends Command_1.Command {
     copyDirTo(path, dest) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield child_process_1.execSync(`robocopy ${path} ${dest} /e`);
+                yield child_process_1.execSync(`robocopy ${path} ${dest} /e /njh /njs /ndl /nc /ns`);
             }
             catch (e) {
                 console.log(e.output.toString());
@@ -164,7 +165,7 @@ class CreateCommand extends Command_1.Command {
     }
     initNPM() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield child_process_1.execSync('yarn init -y');
+            yield child_process_1.execSync('yarn init -y --silent');
         });
     }
     copyTSConfig(react) {

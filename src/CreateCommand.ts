@@ -1,6 +1,6 @@
 /* eslint-disable node/no-path-concat */
 import { execSync } from 'child_process'
-import { closeSync, copyFileSync, existsSync, mkdirSync, openSync, readFileSync, writeFileSync } from 'fs'
+import { closeSync, existsSync, mkdirSync, openSync, readFileSync, writeFileSync } from 'fs'
 import { chdir } from 'process'
 import { CommandFlag } from './CommandFlag'
 import { ScriptsBuilder } from './ScriptsBuilder'
@@ -90,6 +90,7 @@ export class CreateCommand extends Command {
     }
     await this.copyHTML(args[0])
     await this.copyTSConfig(args[1] === '-r' || args[1] === '--react')
+    await this._scriptsBuilder.add()
   }
 
   private async copyHTML (title: string): Promise<void> {
@@ -105,7 +106,7 @@ export class CreateCommand extends Command {
 
   private async copyDirTo (path: string, dest: string): Promise<void> {
     try {
-      await execSync(`robocopy ${path} ${dest} /e`)
+      await execSync(`robocopy ${path} ${dest} /e /njh /njs /ndl /nc /ns`)
     } catch (e) {
       console.log((e as any).output.toString())
       if ((e as any).status !== 1) process.exit()
@@ -149,7 +150,7 @@ export class CreateCommand extends Command {
   }
 
   private async initNPM (): Promise<void> {
-    await execSync('yarn init -y')
+    await execSync('yarn init -y --silent')
   }
 
   private async copyTSConfig (react?: boolean): Promise<void> {
